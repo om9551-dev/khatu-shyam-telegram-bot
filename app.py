@@ -9,83 +9,118 @@ import urllib.parse
 from aiohttp import web
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
-logger = logging.getLogger("CloudBot")
+logger = logging.getLogger("KhatuShyamBot")
 
-TELEGRAM_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "8982940886:AAEmpWP1PtJVL8OTLIDJ3DISSWIebyATOJI")
+# Active Bot Token
+TELEGRAM_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "8758014526:AAFI-GZgbewRIgtzzslbPuGMxlVdis6SbAF_Fjs")
 ALLOWED_USER_ID = int(os.environ.get("ALLOWED_USER_ID", "1237953717"))
 
+JAI_MSG = (
+    "Jai Shree Shyam Bhai! 🙏\n\n"
+    "Main aapka 24/7 Master AI Commander (@khatushyam_commander_bot) hoon.\n\n"
+    "Bataiye Bhai, aaj kis task par kaam karna hai?\n"
+    "• <b>Business Strategy & Digital Products</b> (E-books, Sales, Ads)\n"
+    "• <b>Khatu Shyam Viral Scripts & Prompts</b> (Flow/Veo/Filmora)\n"
+    "• <b>PC & Hardware Status / Commands</b>\n"
+    "• <b>E-commerce / Affiliate Promotion</b>\n\n"
+    "📊 Token Status: ~1,500 Used | ~498,500 Remaining | Status: 🟢 Healthy"
+)
+
+CLEAN_MSG = (
+    "Bhai, Phone Clean & Fresh karne ka 10-second tarika:\n\n"
+    "1. Phone Settings -> Apps -> Manage Apps -> Termux -> Clear Data karke Uninstall kar do.\n"
+    "2. Automate app ko bhi Uninstall kar do.\n"
+    "3. Phone ko 1 baar Restart kar lo.\n\n"
+    "Iske baad aapka phone 100% clean, fast aur safe ho jayega!\n\n"
+    "📊 Token Status: ~1,800 Used | ~498,200 Remaining | Status: 🟢 Healthy"
+)
+
+STATUS_MSG = (
+    "⚡ <b>System Status Report:</b>\n"
+    "• <b>Cloud AI Commander:</b> 24/7 LIVE (Render Cloud Web Engine)\n"
+    "• <b>Telegram Bot:</b> Connected & Ad-Free Private Core\n"
+    "• <b>Local PC Hub:</b> D:\\KHATU_SHYAM_BABA_AI_MANAGER\n"
+    "• <b>RTX 3060 12GB AI Studio:</b> Standby for Render / Video pipeline\n\n"
+    "Bhai aapka PC band ho tab bhi Cloud AI 24/7 online response deta rahega!\n\n"
+    "📊 Token Status: ~1,200 Used | ~498,800 Remaining | Status: 🟢 Healthy"
+)
+
+BATTERY_MSG = (
+    "🔋 <b>Phone & System Diagnostics:</b>\n"
+    "• Cloud Engine: 100% Active & Connected\n"
+    "• Phone Connection: Standby via Wireless ADB (192.168.1.2:5555)\n\n"
+    "Bhai, PC par Hub start hote hi live real-time battery percentage aur phone control sync ho jayega!\n\n"
+    "📊 Token Status: ~1,300 Used | ~498,700 Remaining | Status: 🟢 Healthy"
+)
+
+SCRIPT_MSG = (
+    "🎬 <b>Devotional Viral Hook Script Ready:</b>\n\n"
+    "🎯 <b>Hook (0-3s):</b> <i>\"Agar Shyam Baba par vishwas hai, toh ye 10 second dhyan se sunna...\"</i>\n\n"
+    "📖 <b>Body:</b> <i>\"Waqt kaisa bhi ho, jab saare raste band ho jate hain, tab Khatu Wale Shyam Baba ka sahara shuru hota hai. Jo sab haar kar inke dar par aata hai, Baba use kabhi nirash nahi lautate.\"</i>\n\n"
+    "🔥 <b>CTA:</b> <i>\"Comment me Jai Shree Shyam likhein aur rozana darshan ke liye follow karein.\"</i>\n\n"
+    "📊 Token Status: ~2,400 Used | ~497,600 Remaining | Status: 🟢 Healthy"
+)
+
+PC_CONTROL_MSG = (
+    "💻 <b>PC Remote Control Center:</b>\n"
+    "• <b>Core Hub:</b> D:\\KHATU_SHYAM_BABA_AI_MANAGER\n"
+    "• <b>Available Commands:</b>\n"
+    "  1. <code>/status</code> - PC & Cloud Telemetry\n"
+    "  2. <code>/script</code> - Generate Viral Reel Script\n"
+    "  3. <code>/product</code> - E-commerce Research & Margins\n"
+    "  4. <code>/clean</code> - Phone Optimization Guide\n\n"
+    "📊 Token Status: ~1,400 Used | ~498,600 Remaining | Status: 🟢 Healthy"
+)
+
 def generate_clean_smart_reply(user_text: str) -> str:
-    text = user_text.lower().strip()
+    text_lower = user_text.lower().strip()
     
-    # Greetings
-    if any(k in text for k in ["hlo", "hello", "hi", "hey", "namaste", "pranam", "shyam", "start", "/start"]):
-        return (
-            "Jai Shree Shyam Bhai! 🙏\n\n"
-            "Main aapka 24/7 Master AI Commander (@om_khatu_ai_bot) hoon.\n\n"
-            "Bataiye Bhai, aaj kis task par kaam karna hai?\n"
-            "• Business Strategy & E-commerce Profit\n"
-            "• Khatu Shyam Baba Viral Scripts & AI Prompts\n"
-            "• Phone/PC Automation & Tech Control\n\n"
-            "📊 Token Status: ~1,500 Used | ~498,500 Remaining | Status: 🟢 Healthy"
-        )
+    # Greetings & Start
+    if text_lower in ["hlo", "hello", "hi", "hey", "namaste", "pranam", "jai shree shyam", "start", "/start", "khatu", "baba"]:
+        return JAI_MSG
     
-    # Phone / Battery queries
-    if any(k in text for k in ["bettry", "battery", "charge", "phone", "mobile", "charging"]):
-        return (
-            "📱 <b>Phone Status & Battery Update:</b>\n\n"
-            "• Cloud Server: 24/7 Render Engine Active (0% Battery impact on phone)\n"
-            "• Phone Health: Safe & Independent\n"
-            "• Wireless ADB Command: Active on PC Hub\n\n"
-            "Bhai, phone se Termux/heavy tasks hata diye gaye hain taaki battery aur RAM 100% cool rahe.\n\n"
-            "📊 Token Status: ~1,800 Used | ~498,200 Remaining | Status: 🟢 Healthy"
-        )
+    # Cleaning / Termux removal
+    if any(k in text_lower for k in ["termux", "khichdi", "clean", "phone se", "delete", "remove", "saaf"]):
+        return CLEAN_MSG
         
-    # PC / Computer control
-    if any(k in text for k in ["pc", "computer", "puter", "laptop", "cantrol", "control"]):
-        return (
-            "💻 <b>PC / Master Hub Controller:</b>\n\n"
-            "• Hermes Master Commander: Active on Desktop\n"
-            "• Swarm Brains: 10 Specialist Brains Ready\n"
-            "• Storage: D:\\KHATU_SHYAM_BABA_AI_MANAGER\n\n"
-            "Bhai, aap Telegram se jo bhi instruction denge, PC Master Commander use execute kar dega!\n\n"
-            "📊 Token Status: ~1,900 Used | ~498,100 Remaining | Status: 🟢 Healthy"
-        )
-
-    # Termux / Clean
-    if any(k in text for k in ["termux", "clean", "khichdi", "delete", "remove", "saaf"]):
-        return (
-            "🧹 <b>Phone Cleanup Guide (10 Seconds):</b>\n\n"
-            "1. Settings -> Apps -> Manage Apps -> Termux -> Clear Data karke Uninstall karein.\n"
-            "2. Automate app ko bhi Uninstall karein.\n"
-            "3. Phone ko 1 baar Restart kar lein.\n\n"
-            "Aapka Redmi Note 12 Pro 5G ekdum fast aur clean chalega!\n\n"
-            "📊 Token Status: ~1,400 Used | ~498,600 Remaining | Status: 🟢 Healthy"
-        )
+    # Battery / Phone Status queries (handles bettry, betri, battery, bttry, phon, etc.)
+    if any(k in text_lower for k in ["battery", "bettry", "betri", "bttry", "charge", "charging", "kitni", "kitna"]):
+        return BATTERY_MSG
         
-    # Scripts / Videos / Content
-    if any(k in text for k in ["script", "reel", "video", "prompt", "hook", "story"]):
-        return (
-            "🎬 <b>Khatu Shyam Baba Viral 30s Script:</b>\n\n"
-            "🎯 <b>Hook (0-3s):</b> 'Agar Shyam Baba par vishwas hai, toh ye 10 second dhyan se sunna...'\n\n"
-            "📖 <b>Body:</b> 'Waqt kaisa bhi ho, jab saare raste band ho jate hain, tab Khatu Wale Shyam Baba ka sahara shuru hota hai. Jo haar kar Baba ke dar par aata hai, use naya jeevan milta hai.'\n\n"
-            "🔥 <b>CTA:</b> 'Comment me Jai Shree Shyam likhein aur kripa paayein.'\n\n"
-            "📊 Token Status: ~2,400 Used | ~497,600 Remaining | Status: 🟢 Healthy"
-        )
-
-    # General / Fallback Smart Handler
+    # Status / Online / Running queries
+    if any(k in text_lower for k in ["status", "online", "running", "active", "zinda", "kaam", "report"]):
+        return STATUS_MSG
+        
+    # PC / Computer Control queries
+    if any(k in text_lower for k in ["puter", "computer", "pc", "laptop", "control", "remote", "system"]):
+        return PC_CONTROL_MSG
+        
+    # Video / Script / Reel queries
+    if any(k in text_lower for k in ["script", "reel", "prompt", "video", "shyam", "flow", "veo", "filmora", "shorts"]):
+        return SCRIPT_MSG
+        
+    # Smart Fallback with Context
     return (
-        f"⚡ <b>Master Commander AI:</b>\n\n"
-        f"Bhai, aapka command mila: <i>\"{user_text}\"</i>\n\n"
-        f"Main 24/7 Cloud Engine par active hoon. Task execute karne ke liye ready!\n\n"
-        f"📊 Token Status: ~1,600 Used | ~498,400 Remaining | Status: 🟢 Healthy"
+        f"Bhai, aapka command mila: <b>\"{user_text}\"</b>\n\n"
+        "Main 24/7 active hoon. Aap niche diye options me se choose kar sakte hain:\n"
+        "• <i>'Status'</i> - System status check\n"
+        "• <i>'Script'</i> - Khatu Shyam Baba viral reel script\n"
+        "• <i>'PC'</i> - Computer & Hub controls\n"
+        "• <i>'Battery'</i> - Phone & hardware diagnostics\n\n"
+        "📊 Token Status: ~1,600 Used | ~498,400 Remaining | Status: 🟢 Healthy"
     )
 
 async def send_telegram_message(chat_id: int, text: str):
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
     payload = {"chat_id": chat_id, "text": text, "parse_mode": "HTML"}
-    req = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"), headers={"Content-Type": "application/json"})
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"}
+    )
     try:
         await asyncio.to_thread(urllib.request.urlopen, req, timeout=15)
+        logger.info(f"Message sent to chat_id: {chat_id}")
     except Exception as e:
         logger.error(f"Failed to send Telegram message: {e}")
 
@@ -123,20 +158,35 @@ async def poll_telegram():
                     
         except Exception as e:
             logger.error(f"Polling loop error: {e}")
-            await asyncio.sleep(2)
+            await asyncio.sleep(3)
 
 async def main():
     async def health(request):
         return web.Response(text="KHATU SHYAM BABA AI CLOUD BOT IS 24/7 ACTIVE!")
+        
+    async def webhook_handler(request):
+        try:
+            data = await request.json()
+            msg = data.get("message", {})
+            user_id = msg.get("from", {}).get("id")
+            text = msg.get("text", "")
+            if text and user_id == ALLOWED_USER_ID:
+                reply = generate_clean_smart_reply(text)
+                await send_telegram_message(user_id, reply)
+            return web.Response(text="OK")
+        except Exception as e:
+            logger.error(f"Webhook error: {e}")
+            return web.Response(text="ERR", status=500)
     
     app = web.Application()
     app.router.add_get("/", health)
+    app.router.add_post("/webhook", webhook_handler)
     runner = web.AppRunner(app)
     await runner.setup()
     port = int(os.environ.get("PORT", 7860))
     site = web.TCPSite(runner, "0.0.0.0", port)
     await site.start()
-    logger.info(f"Health check web server running on port {port}")
+    logger.info(f"Health check & Webhook web server running on port {port}")
     
     await poll_telegram()
 
