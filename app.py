@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger("KhatuShyamBot")
 
 # Active Bot Token
-TELEGRAM_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "8758014526:AAFI-GZgbewRIgtzzslbPuGMxlVdis6SbAF_Fjs")
+TELEGRAM_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 ALLOWED_USER_ID = int(os.environ.get("ALLOWED_USER_ID", "1237953717"))
 
 JAI_MSG = (
